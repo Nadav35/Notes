@@ -2,11 +2,11 @@
 
 A data structure that has O(logn) search time for **find**, **insert** and **delete**. At the head is a root node, with at most 2 children. Everything in the left sub tree has to be less than or equal to the root node, and everything in the right sub tree has to be greater than the root node. Each sub tree is also a BST. 
 
-## find
+## Find
 
 * We are only given the root, so first thing is check if the value on the node is equal to the value of the root. Depending on the value, we either go left or right, if there are any children that aren't null. We will eventually either find the value and return true, or there will be no more children and we return false. 
 
-## insert
+## Insert
 
 * Depending on value, the new node can either be at the left or right of the root. If it's bigger for example, we check to see if there's a right child. If there is, we make the same comparison we did before, only with the right child. Eventually there will be a place where there is no child, and that where the node will be inserted.
 
