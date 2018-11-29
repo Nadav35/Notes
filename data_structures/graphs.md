@@ -28,6 +28,10 @@ Sparsity is the relationship between the number of vertices a graph has and the 
 ### What makes a graph a simple graph? What attributes would make it not simple?
 * A simple graph, aka a strict graph, is an unweighted, undirected graph containing no loopsor multiple edges. It can be either connected or unconnected. If any of the conditions aren't met, then the graph is not simple.
 
+### What is the maximum number of edges in a directed simple graph? Undirected simple graph? Answer should be in terms of N
+* In a directed simple graph with N nodes, there are N - 1 edges that can lead from it. So, the max number of edges is N * (N - 1).
+* In an undirected simple graph, the max number is (N*(N - 1)) / 2, because each edge is specified by its two endpoints and order doesn't matter. Therefore the number of edges the umber of subsets of size 2 chosen from the set of vertices.
+
 ## Dependency Set
 A list of tasks or events that depened on eachother in some way.
 For example, the Vertices will be tasks, and for edges, Task A is connected to Task B IFF Task B depends on Task A. In other words, Task A must be done before Task B. Direction matters and the graph has no cycles. 
