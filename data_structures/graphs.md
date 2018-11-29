@@ -25,6 +25,9 @@ Sparsity is the relationship between the number of vertices a graph has and the 
 * A weighted graph is an edge labeled graph where the labels can be operated on by the usual arithmetic operators, including comparisons like using les than and greater than. The idea is that some edges may be more or less expensive, and the cost is represented by the edge labels or weight.
 * Unweighted graph have edges that are not labeled.
 
+### What makes a graph a simple graph? What attributes would make it not simple?
+* A simple graph, aka a strict graph, is an unweighted, undirected graph containing no loopsor multiple edges. It can be either connected or unconnected. If any of the conditions aren't met, then the graph is not simple.
+
 ## Dependency Set
 A list of tasks or events that depened on eachother in some way.
 For example, the Vertices will be tasks, and for edges, Task A is connected to Task B IFF Task B depends on Task A. In other words, Task A must be done before Task B. Direction matters and the graph has no cycles. 
