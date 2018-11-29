@@ -19,6 +19,12 @@ Sparsity is the relationship between the number of vertices a graph has and the 
 * Density is important in determining the efficienty of algorithms that are applied on graphs. The denser a graph is, the slower the algorithms will be.
 * A tree is a graph if it has N vertices(or nodes) and n - 1 edges. Most trees are also therefore graphs. Trees are almost always sprase graphs.
 
+### Difference between directed, undirected, weighted, and unweighted?
+* In an undirected graph, the order of vertices in the pairs in the Edge doesn't matter.
+* In a directed graph, the order does matter.
+* A weighted graph is an edge labeled graph where the labels can be operated on by the usual arithmetic operators, including comparisons like using les than and greater than. The idea is that some edges may be more or less expensive, and the cost is represented by the edge labels or weight.
+* Unweighted graph have edges that are not labeled.
+
 ## Dependency Set
 A list of tasks or events that depened on eachother in some way.
 For example, the Vertices will be tasks, and for edges, Task A is connected to Task B IFF Task B depends on Task A. In other words, Task A must be done before Task B. Direction matters and the graph has no cycles. 
