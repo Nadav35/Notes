@@ -541,3 +541,280 @@ Checking for undefined also kind of sucks, you can use typeof, but it will retur
 typeof null will return an object, which is a bug
 
 === can also be used to check if something is null.
+
+#### Asynchronous JavaScript
+
+JavaScript is a single-threaded programming language. This means that the JavaScript engine can only process a piece of code at a time.
+
+One of its main consequences is that when JavaScript encounters a piece of code that takes a long time to process, it will block all code after that from running.
+
+JavaScript uses a data structure that stores information about active functions named Call Stack.
+
+A Call Stack is like a pile of books. Every book that goes into that pile sits on top of the previous book.
+
+The last book to go into the pile will be the first one removed from it, and the first book added to the pile will be the last one removed.
+
+The solution to executing heavy pieces of code without blocking anything is asynchronous callback functions. These functions are executed later — asynchronously.
+
+The asynchronous process begins with an asynchronous callback functions placed into a Heap or region of memory. You can think of the Heap as an Event Manager.
+
+The Call Stack asks the Event Manager to execute a specific function only when a certain event happens. Once that event happens, the Event Manager moves the function to the Callback Queue. Note: When the Event Manager handles a function, the code after that is not blocked and JavaScript continues its execution.
+
+The Event Loop handles the execution of multiple pieces of your code over time. The Event Loop monitors the Call Stack and the Callback Queue.
+
+The Call Stack is constantly checked whether it is empty or not. When it is empty, the Callback Queue is checked if there is a function waiting to be invoked. When there is a function waiting, the first function in the queue is pushed into the Call Stack, which will run it. This checking process is called a ‘tick’ in the Event Loop.
+
+```
+const first = function () {
+  console.log('First message')
+}
+const second = function () {
+  console.log('Second message')
+}
+const third = function() {
+  console.log('Third message')
+}
+
+first();
+setTimeout(second, 0);
+third();
+
+// Output:
+  // First message
+  // Third message
+  // Second message
+```
+
+Note: The second() function is not executed after 0ms. The time you pass in to setTimeout function does not relate to the delay of its execution. The Event Manager will wait the given time before moving that function into the Callback Queue. Its execution will only take place on a future ‘tick’ in the Event Loop.
+
+#### Event Bubbling/Capturing
+
+Bubbling
+
+The bubbling principle is simple.
+
+When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors.
+
+Stopping bubbling
+
+A bubbling event goes from the target element straight up. Normally it goes upwards till <html>, and then to document object, and some events even reach window, calling all handlers on the path.
+
+But any handler may decide that the event has been fully processed and stop the bubbling.
+
+The method for it is event.stopPropagation().
+
+Capturing
+
+There’s another phase of event processing called “capturing”. It is rarely used in real code, but sometimes can be useful.
+
+The standard DOM Events describes 3 phases of event propagation:
+
+Capturing phase – the event goes down to the element.
+Target phase – the event reached the target element.
+Bubbling phase – the event bubbles up from the element.
+
+#### Event Delegation
+
+Capturing and bubbling allow us to implement one of most powerful event handling patterns called event delegation.
+
+The idea is that if we have a lot of elements handled in a similar way, then instead of assigning a handler to each of them – we put a single handler on their common ancestor.
+
+In the handler we get event.target, see where the event actually happened and handle it.
+
+
+#### ES6 Changes
+
+Block Scope
+
+ES5 only had “function-level scope” (i.e. you wrap code in functions to create scope) and caused a lot of issues. ES6 provides “block”-level scoping(i.e curly-braces to scope) when we use “let” or “const” instead of “var”.
+
+Prevent Duplicate Variable Declaration
+
+ES6 doesn’t allow duplicate declaration of variables when we declare them using “let” or “const” in the same scope. This is very helpful in avoiding duplicate function expressions coming from different libraries (like the “add” function expression below).
+
+babel — A Tool to convert ES6 to ES5
+
+Babel is the most popular tool used to convert ES6 to ES5
+
+Makes It Trivial To Use Functions In Loops
+
+In ES5, if you had a function inside a loop (like for(var i = 0; i < 3; i++) {…}), and if that function tried to access the looping variable “i”, we’d be in trouble because of hoisting. In ES6, if you use “let”, you can use functions without any issue.
+
+Strict Mode
+
+Strict Mode(“use strict”) helps identify common issues (or “bad” parts) and also helps with “securing” JavaScript. In ES5, the Strict Mode is optional but in ES6, it’s needed for many ES6 features. So most people and tools like babel automatically add “use strict” at the top of the file putting the whole JS code in strict mode and forcing us to write better JavaScript.
+
+### WebPage LifeCycle
+
+#### DOMContentLoaded, load, beforeunload, unload
+
+The lifecycle of an HTML page has three important events:
+
+* DOMContentLoaded – the browser fully loaded HTML, and the DOM tree is built, but external resources like pictures <img> and stylesheets may be not yet loaded.
+* load – the browser loaded all resources (images, styles etc).
+* beforeunload/unload – when the user is leaving the page.
+
+#### DOMContentLoaded
+
+DOMContentLoaded event happens on the document object.
+
+To listen for this event we have to use "addEventListener":
+
+```
+document.addEventListener("DOMContentLoaded", ready);
+```
+
+At the first sight DOMContentLoaded event is very simple. The DOM tree is ready – here’s the event. But there are few peculiarities.
+
+#### DOMContentLoaded and scripts
+
+When the browser initially loads HTML and comes across a <script>...</script> in the text, it can’t continue building DOM. It must execute the script right now. So DOMContentLoaded may only happen after all such scripts are executed.
+
+External scripts (with src) also put DOM building to pause while the script is loading and executing. So DOMContentLoaded waits for external scripts as well.
+
+The only exception are external scripts with async and defer attributes. They tell the browser to continue processing without waiting for the scripts. This lets the user see the page before scripts finish loading, which is good for performance.
+
+#### DOMContentLoaded and styles
+
+External style sheets don’t affect DOM, and so DOMContentLoaded does not wait for them.
+
+But there’s a pitfall: if we have a script after the style, then that script must wait for the stylesheet to execute:
+
+```
+<link type="text/css" rel="stylesheet" href="style.css">
+<script>
+  // the script doesn't not execute until the stylesheet is loaded
+  alert(getComputedStyle(document.body).marginTop);
+</script>
+```
+
+The reason is that the script may want to get coordinates and other style-dependent properties of elements, like in the example above. Naturally, it has to wait for styles to load.
+
+As DOMContentLoaded waits for scripts, it now waits for styles before them as well.
+
+#### Built-in browser autofill
+
+Firefox, Chrome and Opera autofill forms on DOMContentLoaded.
+
+For instance, if the page has a form with login and password, and the browser remembered the values, then on DOMContentLoaded it may try to autofill them (if approved by the user).
+
+So if DOMContentLoaded is postponed by long-loading scripts, then autofill also awaits. You probably saw that on some sites (if you use browser autofill) – the login/password fields don’t get autofilled immediately, but there’s a delay till the page fully loads. That’s actually the delay until the DOMContentLoaded event.
+
+One of minor benefits in using async and defer for external scripts – they don’t block DOMContentLoaded and don’t delay browser autofill
+
+#### readyState
+What happens if we set the DOMContentLoaded handler after the document is loaded?
+
+Naturally, it never runs.
+
+There are cases when we are not sure whether the document is ready or not, for instance an external script with async attribute loads and runs asynchronously. Depending on the network, it may load and execute before the document is complete or after that, we can’t be sure. So we should be able to know the current state of the document.
+
+The document.readyState property gives us information about it. There are 3 possible values:
+
+* "loading" – the document is loading.
+* "interactive" – the document was fully read.
+* "complete" – the document was fully read and all resources (like images) are loaded too.
+
+So we can check document.readyState and setup a handler or execute the code immediately if it’s ready.
+
+Like this:
+
+```
+function work() { /*...*/ }
+
+if (document.readyState == 'loading') {
+  document.addEventListener('DOMContentLoaded', work);
+} else {
+  work();
+}
+```
+
+#### Lifecycle events summary
+
+Page lifecycle events:
+
+* DOMContentLoaded event triggers on document when DOM is ready. We can apply JavaScript to elements at this stage.
+* All inline scripts and scripts with defer are already executed.
+* Async scripts may execute both before and after the event, depends on when they load.
+* Images and other resources may also still continue loading.
+load event on window triggers when the page and all resources are loaded. We rarely use it, because there’s usually no need to wait for so long.
+* beforeunload event on window triggers when the user wants to leave the page. If it returns a string, the browser shows a question whether the user really wants to leave or not.
+unload event on window triggers when the user is finally leaving, in the handler we can only do simple things that do not involve delays or asking a user. Because of that limitation, it’s rarely used.
+* document.readyState is the current state of the document, changes can be tracked in the readystatechange event:
+* loading – the document is loading.
+* interactive – the document is parsed, happens at about the same time as DOMContentLoaded, but before it.
+* complete – the document and resources are loaded, happens at about the same time as window.onload, but before it.
+
+#### DOM Events
+
+DOM events are set to notify whenever any such event takes place.
+
+Events can be anything from basic user interactions (such as clicks, or keydowns) to automated notifications of things happening in the rendering model.
+
+#### Most Common Events
+
+| Event Name  | Fired When |
+| ------------- | ------------- |
+| Cached  | The resources listed in the manifest have been downloaded, and the application is now cached.  |
+| Error  | A resource failed to load.  |
+| Abort  | The loading of a resource has been aborted.  |
+| Load  | A resource and its dependent resources have finished loading.  |
+| beforeunload  | The window, the document and its resources are about to be unloaded.  |
+| unload  | The document or a dependent resource is being unloaded.  |
+
+#### Network Events
+
+| Event Name  | Fired When  |
+| ------------- | ------------- |
+| online  | The browser has gained access to the network.  |
+| offline  | The browser has lost access to the network.  |
+
+#### Focus Events
+
+| Event Name  | Fired When  |
+| ------------- | ------------- |
+| focus  | An element has received focus (does not bubble).  |
+| blur  | An element has lost focus (does not bubble).  |
+
+
+#### Promises
+
+* A “producing code” that does something and takes time. For instance, the code loads a remote script. That’s a “singer”.
+* A “consuming code” that wants the result of the “producing code” once it’s ready. Many functions may need that result. These are the “fans”.
+* A promise is a special JavaScript object that links the “producing code” and the “consuming code” together. In terms of our analogy: this is the “subscription list”. The “producing code” takes whatever time it needs to produce the promised result, and the “promise” makes that result available to all of the subscribed code when it’s ready.
+
+
+The constructor syntax for a promise object is:
+
+```
+let promise = new Promise(function(resolve, reject) {
+  // executor (the producing code, "singer")
+});
+```
+
+The function passed to new Promise is called the executor. When the promise is created, this executor function runs automatically. It contains the producing code, that should eventually produce a result. In terms of the analogy above: the executor is the “singer”.
+
+
+The resulting promise object has internal properties:
+
+* state — initially “pending”, then changes to either “fulfilled” or “rejected”,
+* result — an arbitrary value of your choosing, initially undefined.
+When the executor finishes the job, it should call one of the functions that it gets as arguments:
+
+* resolve(value) — to indicate that the job finished successfully:
+  * sets state to "fulfilled",
+  * sets result to value.
+* reject(error) — to indicate that an error occurred:
+  * sets state to "rejected",
+  * sets result to error.
+
+Here’s an example of a Promise constructor and a simple executor function with its “producing code” (the setTimeout):
+
+```
+let promise = new Promise(function(resolve, reject) {
+  // the function is executed automatically when the promise is constructed
+
+  // after 1 second signal that the job is done with the result "done!"
+  setTimeout(() => resolve("done!"), 1000);
+});
+```
