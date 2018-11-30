@@ -367,3 +367,177 @@ console.log(rusty.describe())   // "Rusty is a Beagle"
 console.log(rusty.__proto__)    // { describe: ƒ , constructor: ƒ }
 /* .constructor property points to the constructor of the object */
 console.log(rusty.constructor)  // ƒ Dog(breed, name) { ... }
+#### Prototype Chain
+
+The prototype chain is a series of links between objects that reference one another.
+
+When looking for a property in an object, JavaScript engine will first try to access that property on the object itself.
+
+If it is not found, the JavaScript engine will look for that property on the object it inherited its properties from — the object’s prototype.
+
+The engine will traverse up the chain looking for that property and return the first one it finds.
+
+The last object in the chain is the built-in Object.prototype, which has null as its prototype. Once the engine reaches this object, it returns undefined.
+
+#### Own vs Inherited Properties
+
+Objects have own properties and inherited properties.
+
+Own properties are properties that were defined on the object.
+
+Inherited properties were inherited through prototype chain.
+
+```
+function Car() { }
+Car.prototype.wheels = 4;
+Car.prototype.airbags = 1;
+
+var myCar = new Car();
+myCar.color = 'black';
+
+/*  Check for Property including Prototype Chain:  */
+console.log('airbags' in myCar)  // true
+console.log(myCar.wheels)        // 4
+console.log(myCar.year)          // undefined
+
+/*  Check for Own Property:  */
+console.log(myCar.hasOwnProperty('airbags'))  // false — Inherited
+console.log(myCar.hasOwnProperty('color'))    // true
+```
+
+Object.create(obj) — Creates a new object with the specified prototype object and properties.
+
+```
+var dog = { legs: 4 };
+var myDog = Object.create(dog);
+
+console.log(myDog.hasOwnProperty('legs'))  // false
+console.log(myDog.legs)                    // 4
+console.log(myDog.__proto__ === dog)       // true
+```
+
+#### Inheritance by Reference
+
+An inherited property is a copy by reference of the prototype object’s property from which it inherited that property.
+
+If an object’s property is mutated on the prototype, objects which inherited that property will share the same mutation. But if the property is replaced, the change will not be shared.
+
+```
+var objProt = { text: 'original' };
+var objAttachedToProt = Object.create(objProt);
+console.log(objAttachedToProt.text)   // original
+
+objProt.text = 'prototype property changed';
+console.log(objAttachedToProt.text)   // prototype property changed
+
+objProt = { text: 'replacing property' };
+console.log(objAttachedToProt.text)   // prototype property changed
+```
+
+#### Classical Inheritance vs. Prototypal Inheritance
+
+In classical inheritance, objects inherit from classes — like a blueprint or a description of the object to be created — and create sub-class relationships. These objects are created via constructor functions using the new keyword.
+
+The downside of classical inheritance is that it causes:
+inflexible hierarchy
+tight coupling problems
+fragile base class problems
+duplication problems
+And the so famous gorilla/banana problem — “What you wanted was a banana, what you got was a gorilla holding the banana, and the entire jungle.”
+
+In prototypal inheritance, objects inherit directly from other objects. Objects are typically created via Object.create(), object literals or factory functions.
+
+### Event Loop Lecture Notes
+
+JavaScript is a single threaded programming language. It can only run one thing at a time.
+
+The call stack is a data structure that records where in the program we are.
+
+The heap is where memory allocation happens.
+
+The call stack is where the stack frames live.
+
+Stack overflow is where there are too many stacks in the call stack, and it has reached past the stack bound.
+
+Blocking is when the execution of additional JavaScript in the Node.js process must wait until a non-JavaScript operation completes. This happens because the event loop is unable to continue running JavaScript while a blocking operation is occurring.
+
+All of the I/O methods in the Node.js standard library provide asynchronous versions, which are non-blocking, and accept callback functions. Some methods also have blocking counterparts, which have names that end with Sync.
+
+The event loop's job is to loop at the call stack and loop at the task queue.
+
+If the stack is empty, it takes the first thing on the queue and pushes it onto the stack, effectively running it.
+
+Any runtime commands will be run immediately, and any call back commands will be thrown into the task queue temporarily. When all of the runtime commands have completed running, only then will the callback commands be pushed onto the call stack to be executed.
+
+Even though logically, it may seem like a command with a setTimeout timer of 0 milliseconds should run in constant time, the event loop actually pushes the event to the beginning of the task queue to only run after all of the real time events have concluded.
+
+However, if you clone the V8 code base, and search all files using grep for setTimeout, DOM, or HTTP Request, those searches return empty.
+
+We have our Web APIs, web services that hold the DOM, time out, AJAX, etc.
+
+#### What is Event Delegation?
+
+If you add an event listener to a DOM element, all nested children DOM elements also gain that same event listener through inheritance.
+
+#### What is Event Bubbling?
+
+The opposite of Event Delegation, also known as propagation. If a child DOM element's events will also bubble up and fire on all it's parents.
+
+#### What is the difference between target and currentTarget?
+
+The latter is the element with the listener attached, the former is the element that actually triggered it.
+
+#### What is an IIFE?
+
+An IIFE is an immediately invoked function expression.
+
+```
+// the following example would error out
+function foo(){
+
+}();
+
+//this however is more acceptable
+var foo = function(){
+  // this is an expression
+  //resolves to a value, even if just 'undefined'
+};
+
+
+//if you want to run it in one line, put parentheses around an expression like so:
+
+(function foo(){})();
+```
+
+An expression is any valid unit of code that resolves to a value.
+
+The use case of an IIFE would be to control variable scope.
+
+The variables used in an IIFE are not available outside of the function expression itself.
+
+#### Null/Undeclared/Undefined
+
+Undeclared: You forgot to declare it somewhere before you referenced it.
+
+Undefined: It has been declared, but not assigned a value.
+```
+var foo;
+
+console.log(foo);
+```
+
+Null is a value. Its value is null. It has a "nothing" value.
+
+It's value is not zero, not an empty string, object, or array. It is inherently falsy.
+
+#### How do you check for these states?
+
+Undeclared usually lets you know it is undeclared, except when assigning a value.
+
+Checking for undefined also kind of sucks, you can use typeof, but it will return undefined as a string ("undefined").
+
+=== is preferred to check if something is undefined.
+
+typeof null will return an object, which is a bug
+
+=== can also be used to check if something is null.
