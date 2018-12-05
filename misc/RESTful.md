@@ -33,3 +33,48 @@ The first sub-constraint of “uniform interface” affects the way that resourc
 The Web uses URI to identify resources, and HTTP as its communication standard. To get a resource stored on a server, a client makes a HTTP GET request to the URI that identifies that resource. Every time you type an address into your browser, your browser makes a GET request to that URI. If it receives a 200 OK response and an HTML document back, then it renders the page in the window so that you can view it.
 
 ## **Interface constraint 2: manipulation of resources through representations**
+
+The second sub-constraint of “uniform interface” says that the client manipulates resources through sending representations to the server–usually a JSON object containing the content that it would like to add, delete, or modify. In REST, the server has full control of the resources, and is responsible for making any changes. When a client wishes to make changes to resources, it sends the server a representation of what it would like the resulting resource to look like. The server takes the request as a suggestion, but still has ultimate control.
+
+Let’s think about the case of a blog on the Web. When a user makes a new blog post, their computer wants to tell the server that a new blog post needs to be added. To do this, it sends an HTTP POST or PUT request with the content for the new blog post. The server sends back a response indicating whether the post was created, or if there was a problem. In a non-REST world, the client may literally be sending instructions for operations such as add a new line and make the title of the blog “What RESTful Actually Means”, instead of simply sending a representation of what it would like the final product to look like.
+
+## **Interface constraint 3: self-descriptive messages**
+
+Self-descriptive messages are another constraint that ensures a uniform interface between clients and servers. A self-descriptive message is one that contains all the information that the recipient needs to understand it. There should not be additional information in a separate documentation or in another message.
+
+To understand how this applies to the Web, let’s analyze a set of HTTP requests and responses.
+
+When a user types http://www.example.com in the address bar of their web browser, the browser sends the following HTTP request:
+```
+GET / HTTP/1.1
+Host: www.example.com
+```
+This message is self-descriptive because it told the server what HTTP method was used, and the protocol that was used (HTTP 1.1).
+
+The server may send back a response like this:
+```
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home Page</title>
+  </head>
+  </body>
+    <div>Hello World!</div>
+    <a href= “http://www.recurse.com”> Check out the Recurse Center! </a>
+    <img src="awesome-pic.jpg">
+  </body>
+</html>
+```
+This message is self-descriptive because it told the client how it needs to interpret the message body, by indicating that `Content-type` was `text/html`. The client has everything it needs in this single message to handle it appropriately.
+
+Imagine an alternative method of communication where the server sent binary code in one response, and then sent a seperate response telling the client how to interpret the binary code–whether it is an image or a code snippet. If the two responses had somehow arrived out of order, or if a third response was inserted between them, then the client may be confused about how to interpret the responses properly.
+
+## **Interface constraint 4: hypermedia**
+The last interface constraint is the hypermedia constraint. Hypermedia is a fancy word for data sent from the server to the client that contains information about what the client can do next–in other words, what further requests it can make. In REST, servers should be sending only hypermedia to clients.
+
+HTML is a type of hypermedia. To understand this better, let’s look again at the server response above.
+  * `<a href= “http://www.recurse.com”> Check out the Recurse Center! </a>` tells the client that it should make a GET request to `http://www.recurse.com` if the user clicks on the link.
+  * `<img src="awesome-pic.jpg">` tells the client to immediately make a GET request to `http://www.example.com/awesome-pic.jpg` so it can display the image to the user.
