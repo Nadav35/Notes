@@ -23,6 +23,7 @@ Any expressions in the SELECT part of the query are finally computed.
 Of the remaining rows, rows with duplicate values in the column marked as DISTINCT will be discarded.
 
 ### **ORDER BY**
+
 If an order is specified by the ORDER BY clause, the rows are then sorted by the specified data in either ascending or descending order. Since all the expressions in the SELECT part of the query have been computed, you can reference aliases in this clause.
 
 ### **LIMIT / OFFSET**
