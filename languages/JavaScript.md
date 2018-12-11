@@ -808,7 +808,7 @@ When the executor finishes the job, it should call one of the functions that it 
   * sets state to "rejected",
   * sets result to error.
 
-Here’s an example of a Promise constructor and a simple executor function with its “producing code” (the setTimeout):
+Here is an example of a Promise constructor and a simple executor function with its “producing code” (the setTimeout):
 
 ```
 let promise = new Promise(function(resolve, reject) {
