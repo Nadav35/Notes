@@ -804,7 +804,7 @@ When the executor finishes the job, it should call one of the functions that it 
 * resolve(value) — to indicate that the job finished successfully:
   * sets state to "fulfilled",
   * sets result to value.
-* reject(error) — to indicate that an error occurred:
+* reject (error) — to indicate that an error occurred:
   * sets state to "rejected",
   * sets result to error.
 
