@@ -14,7 +14,7 @@ A data structure that has O(logn) search time for **find**, **insert** & **delet
 
 * if a node to be deleted doesn't have kids it's pretty easy, we just delete the node's parent pointer that's pointing to it.
 
-* if it has just one child, then this child takes its place. If it has 2 children, then take the largest child from the left subtree(or smallest from right subtree) and that's the new node. By definition, since this is the max on the left subtree, it can only have a right child, so if it does then this right child takes the node's place.
+* if it has just one child then this child takes its place. If it has 2 children, then take the largest child from the left subtree(or smallest from right subtree) and that's the new node. By definition, since this is the max on the left subtree, it can only have a right child, so if it does then this right child takes the node's place.
 
 ## balanced
 
