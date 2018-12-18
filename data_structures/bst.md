@@ -1,6 +1,6 @@
 # Binary Search Tree
 
-A data structure that has O(logn) search time for **find**, **insert** and **delete**. At the head is a root node, with at most 2 children. Everything in the left sub tree has to be less than or equal to the root node, and everything in the right sub tree has to be greater than the root node. Each sub tree is also a BST. 
+A data structure that has O(logn) search time for **find**, **insert** & **delete**. At the head is a root node, with at most 2 children. Everything in the left sub tree has to be less than or equal to the root node, and everything in the right sub tree has to be greater than the root node. Each sub tree is also a BST. 
 
 ## Find
 
