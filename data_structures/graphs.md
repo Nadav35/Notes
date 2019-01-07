@@ -26,7 +26,7 @@ Sparsity is the relationship between the number of vertices a graph has and the 
 * Unweighted graph have edges that are not labeled.
 
 ### What makes a graph a simple graph? What attributes would make it not simple?
-* A simple graph, aka a strict graph, is an unweighted, undirected graph containing no loopsor multiple edges. It can be either connected or unconnected. If any of the conditions aren't met, then the graph is not simple.
+* A simple graph, also known as a strict graph, is an unweighted, undirected graph containing no loopsor multiple edges. It can be either connected or unconnected. If any of the conditions aren't met, then the graph is not simple.
 
 ### What is the maximum number of edges in a directed simple graph? Undirected simple graph? Answer should be in terms of N
 * In a directed simple graph with N nodes, there are N - 1 edges that can lead from it. So, the max number of edges is N * (N - 1).
